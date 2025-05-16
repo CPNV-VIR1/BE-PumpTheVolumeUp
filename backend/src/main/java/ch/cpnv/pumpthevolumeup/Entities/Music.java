@@ -66,7 +66,7 @@ public class Music {
 
     @Override
     public String toString(){
-        return "Employee{" + "id=" +
+        return "Music{" + "id=" +
                 this.getId() + ", name='" +
                 this.getName() + '\'' + ", role='" +
                 this.getArtist() + '\'' +
