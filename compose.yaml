@@ -1,0 +1,23 @@
+services:
+  ptvu_db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - backend
+    expose:
+      - 3306
+    volumes:
+      - ptvu_db:/var/lib/mysql
+    
+
+volumes:
+  ptvu_db:
+
+networks:
+  backend:
+    driver: bridge
