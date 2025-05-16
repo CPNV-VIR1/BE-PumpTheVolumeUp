@@ -5,8 +5,13 @@ services:
       dockerfile: ./backend/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./backend/prod-application.properties:/app/application.properties
     networks:
       - backend
+    depends_on:
+      ptvu_db:
+        condition: service_healthy
 
   ptvu_db:
     image: mysql:8.0
@@ -22,6 +27,12 @@ services:
       - 3306
     volumes:
       - ptvu_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
 volumes:
   ptvu_db:
