@@ -1,0 +1,51 @@
+@startuml VIR1_Project
+actor EndUser
+participant APIGateway
+participant Artists
+participant Musics
+database DataBaseEngine
+
+' Get musics
+EndUser->APIGateway: /api/musics (GET)
+activate APIGateway
+
+APIGateway->Musics
+activate Musics
+
+Musics->DataBaseEngine
+activate DataBaseEngine
+
+DataBaseEngine->Musics: return the musics
+deactivate DataBaseEngine
+
+Musics->APIGateway: return data
+deactivate Musics
+
+APIGateway->EndUser: return data
+deactivate APIGateway
+
+' Get musics by artist
+EndUser->APIGateway: /api/artists/{id}/musics (GET)
+activate APIGateway
+
+APIGateway->Artists
+activate Artists
+
+Artists->Musics: artist={id}
+activate Musics
+
+Musics->DataBaseEngine
+activate DataBaseEngine
+
+DataBaseEngine->Musics: return the musics
+deactivate DataBaseEngine
+
+Musics->Artists: return data
+deactivate Musics
+
+Artists->APIGateway: return data
+deactivate Artists
+
+APIGateway->EndUser: return data
+deactivate APIGateway
+@enduml
