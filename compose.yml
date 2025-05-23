@@ -1,14 +1,27 @@
 services:
+  proxy:
+    image: nginx:stable-perl
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+    networks:
+      - backend
+    depends_on:
+      - ptvu_be-music
+
   ptvu_be-music:
     build:
       context: .
-      dockerfile: ./backend/Dockerfile
-    ports:
-      - "8080:8080"
+      dockerfile: ./musics/Dockerfile
+    restart: always
     volumes:
-      - ./backend/prod-application.properties:/app/application.properties
+      - ./musics/prod-application.properties:/app/application.properties
     networks:
       - backend
+    expose:
+      - 8080
     depends_on:
       ptvu_db:
         condition: service_healthy
