@@ -4,6 +4,7 @@ import ch.cpnv.pumpthevolumeup.Entities.Music;
 import ch.cpnv.pumpthevolumeup.Repositories.MusicRepository;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,14 +26,18 @@ public class MusicController {
         return repository.findAll();
     }
 
-    /* curl sample :
-    curl -i -X POST localhost:8080/music \
-        -H "Content-type:application/json" \
-        -d "{\"name\": \"Russel George\", \"artist\": \"gardener\"}"
-    */
-    @PostMapping
-    Music newmusic(@RequestBody Music newmusic){
-        return repository.save(newmusic);
+    @PostMapping()
+    Music newmusic(
+        @RequestParam("name") String name,
+        @RequestParam("artist") String artist,
+        @RequestParam("file") MultipartFile file
+    ){
+        Music music = new Music();
+        music.setName(name);
+        music.setArtist(artist);
+        music.setPath(file);
+
+        return repository.save(music);
     }
 
     /* curl sample :
@@ -50,15 +55,24 @@ public class MusicController {
         -d "{\"name\": \"Samwise Bing\", \"artist\": \"peer-to-peer\"}"
      */
     @PutMapping("{id}")
-    Music replacemusic(@RequestBody Music newMusic, @PathVariable Long id) {
+    Music replacemusic(
+        @RequestParam("name") String name,
+        @RequestParam("artist") String artist,
+        @RequestParam("file") MultipartFile file, @PathVariable Long id
+    ) {
         return repository.findById(id)
                 .map(music -> {
-                    music.setName(newMusic.getName());
-                    music.setArtist(newMusic.getArtist());
+                    music.setName(name);
+                    music.setArtist(artist);
+                    music.setPath(file);
                     return repository.save(music);
                 })
                 .orElseGet(() -> {
+                    Music newMusic = new Music();
                     newMusic.setId(id);
+                    newMusic.setName(name);
+                    newMusic.setArtist(artist);
+                    newMusic.setPath(file);
                     return repository.save(newMusic);
                 });
     }

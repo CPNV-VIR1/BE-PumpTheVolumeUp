@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import java.util.Objects;
+import java.io.File;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 public class Music {
@@ -13,6 +16,7 @@ public class Music {
     @GeneratedValue Long id;
     private String name;
     private String artist;
+    private String path;
 
     public Music(){}
 
@@ -43,6 +47,31 @@ public class Music {
 
     public void setArtist(String artist){
         this.artist = artist;
+    }
+    
+    public String getPath(){
+        return this.path;
+    }
+
+    public void setPath(MultipartFile file){
+        String path = "musics/";
+
+        String folder = System.getProperty("user.dir") + "/" + path;;
+        File directory = new File(folder);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String filename = System.currentTimeMillis() + "-" + file.getOriginalFilename();
+        File dest = new File(folder + filename);
+
+        try {
+            file.transferTo(dest);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la sauvegarde du fichier", e);
+        }
+
+        this.path = path + filename;
     }
 
     @Override
