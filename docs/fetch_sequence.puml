@@ -1,7 +1,7 @@
 @startuml VIR1_Project
 actor EndUser
 participant APIGateway
-participant Artists
+participant Streaming
 participant Musics
 database DataBaseEngine
 
@@ -25,27 +25,27 @@ APIGateway->EndUser: return data
 deactivate APIGateway
 
 ' Get musics by artist
-EndUser->APIGateway: /api/artists/{id}/musics (GET)
+EndUser->APIGateway: /api/stream/{id} (GET)
 activate APIGateway
 
-APIGateway->Artists
-activate Artists
+APIGateway->Streaming
+activate Streaming
 
-Artists->Musics: artist={id}
+Streaming->Musics: music={id}
 activate Musics
 
 Musics->DataBaseEngine
 activate DataBaseEngine
 
-DataBaseEngine->Musics: return the musics
+DataBaseEngine->Musics: return the music
 deactivate DataBaseEngine
 
-Musics->Artists: return data
+Musics->Streaming: return return the music
 deactivate Musics
 
-Artists->APIGateway: return data
-deactivate Artists
+Streaming->APIGateway: return streaming data
+deactivate Streaming
 
-APIGateway->EndUser: return data
+APIGateway->EndUser: return streaming data
 deactivate APIGateway
 @enduml
