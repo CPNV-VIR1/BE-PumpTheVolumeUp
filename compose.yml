@@ -24,9 +24,27 @@ services:
       - ./nginx/:/etc/nginx/conf.d/
     networks:
       - backend
+      - auth
     depends_on:
       - ptvu-be-music
       - ptvu-be-streaming
+      - auth
+
+  auth:
+    image: quay.io/keycloak/keycloak:26.2.4
+    restart: always
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    command: -v start-dev --import-realm jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb;NON_KEYWORDS=VALUE;AUTO_SERVER=true'
+    ports:
+      - "8081:8080"
+    expose:
+      - 8080
+    networks:
+      - auth
 
   ptvu-be-streaming:
     build:
@@ -65,7 +83,10 @@ services:
 volumes:
   ptvu-db:
   ptvu-musics:
+  auth_postgres:
 
 networks:
   backend:
+    driver: bridge
+  auth:
     driver: bridge
