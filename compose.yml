@@ -1,4 +1,20 @@
 services:
+  ptvu-be-music:
+    build:
+      context: .
+      dockerfile: ./musics/Dockerfile
+    restart: always
+    networks:
+      - backend
+    expose:
+      - 8080
+    volumes:
+      - ./musics/prod-application.properties:/app/application.properties
+      - ptvu-musics:/app/musics
+    depends_on:
+      ptvu-db:
+        condition: service_healthy
+
   proxy:
     image: nginx:stable-perl
     restart: always
@@ -9,24 +25,23 @@ services:
     networks:
       - backend
     depends_on:
-      - ptvu_be-music
+      - ptvu-be-music
+      - ptvu-be-streaming
 
-  ptvu_be-music:
+  ptvu-be-streaming:
     build:
       context: .
-      dockerfile: ./musics/Dockerfile
-    restart: always
+      dockerfile: ./streaming/Dockerfile
+    expose:
+      - 8000
     volumes:
-      - ./musics/prod-application.properties:/app/application.properties
+      - ptvu-musics:/app/musics
     networks:
       - backend
-    expose:
-      - 8080
     depends_on:
-      ptvu_db:
-        condition: service_healthy
+      - ptvu-be-music
 
-  ptvu_db:
+  ptvu-db:
     image: mysql:8.0
     restart: always
     environment:
@@ -39,7 +54,7 @@ services:
     expose:
       - 3306
     volumes:
-      - ptvu_db:/var/lib/mysql
+      - ptvu-db:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping"]
       interval: 10s
@@ -48,7 +63,8 @@ services:
       start_period: 30s
 
 volumes:
-  ptvu_db:
+  ptvu-db:
+  ptvu-musics:
 
 networks:
   backend:
