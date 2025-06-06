@@ -3,27 +3,43 @@ services:
     build:
       context: .
       dockerfile: ./musics/Dockerfile
+    restart: always
+    networks:
+      - backend
     expose:
       - 8080
     volumes:
       - ./musics/prod-application.properties:/app/application.properties
       - ptvu-musics:/app/musics
-    networks:
-      - backend
     depends_on:
       ptvu-db:
         condition: service_healthy
+
+  proxy:
+    image: nginx:stable-perl
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+    networks:
+      - backend
+    depends_on:
+      - ptvu-be-music
+      - ptvu-be-streaming
 
   ptvu-be-streaming:
     build:
       context: .
       dockerfile: ./streaming/Dockerfile
-    ports:
-      - "8000:8000"
+    expose:
+      - 8000
     volumes:
       - ptvu-musics:/app/musics
     networks:
       - backend
+    depends_on:
+      - ptvu-be-music
 
   ptvu-db:
     image: mysql:8.0
