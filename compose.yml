@@ -19,6 +19,8 @@ services:
     build:
       context: .
       dockerfile: ./FE-PumpTheVolumUp/Dockerfile
+      args:
+        - APP_PORT=${APP_PORT}
     restart: always
     networks:
       - backend
