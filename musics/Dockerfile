@@ -2,7 +2,7 @@ FROM openjdk:17
 
 RUN microdnf install maven
 
-COPY ./* /app/to-built/
+COPY ./musics /app/to-built/
 
 WORKDIR /app/to-built
 RUN mvn clean install
