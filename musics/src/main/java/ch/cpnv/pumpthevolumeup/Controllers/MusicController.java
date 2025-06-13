@@ -72,6 +72,34 @@ public class MusicController {
     }
 
     /* curl sample :
+    curl -i -X PUT localhost:8080/music/2 \
+        -H "Content-type:application/json" \
+        -d "{\"name\": \"Samwise Bing\", \"artist\": \"peer-to-peer\"}"
+     */
+    @PutMapping("{id}")
+    Music replacemusic(
+        @RequestParam("name") String name,
+        @RequestParam("artist") String artist,
+        @RequestParam("file") MultipartFile file, @PathVariable Long id
+    ) {
+        return repository.findById(id)
+                .map(music -> {
+                    music.setName(name);
+                    music.setArtist(artist);
+                    music.setPath(file);
+                    return repository.save(music);
+                })
+                .orElseGet(() -> {
+                    Music newMusic = new Music();
+                    newMusic.setId(id);
+                    newMusic.setName(name);
+                    newMusic.setArtist(artist);
+                    newMusic.setPath(file);
+                    return repository.save(newMusic);
+                });
+    }
+
+    /* curl sample :
     curl -i -X DELETE localhost:8080/music/2
     */
     @DeleteMapping("{id}")
