@@ -55,7 +55,7 @@ public class MusicController {
         -d "{\"name\": \"Samwise Bing\", \"artist\": \"peer-to-peer\"}"
      */
     @PatchMapping("{id}")
-    Music replacemusic(
+    Music updatemusic(
         @RequestParam(value = "name", required = false) String name,
         @RequestParam(value = "artist", required = false) String artist,
         @RequestParam(value = "file", required = false) MultipartFile file,
