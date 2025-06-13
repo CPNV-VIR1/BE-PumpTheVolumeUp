@@ -50,31 +50,25 @@ public class MusicController {
     }
 
     /* curl sample :
-    curl -i -X PUT localhost:8080/music/2 \
+    curl -i -X PATCH localhost:8080/music/2 \
         -H "Content-type:application/json" \
         -d "{\"name\": \"Samwise Bing\", \"artist\": \"peer-to-peer\"}"
      */
-    @PutMapping("{id}")
+    @PatchMapping("{id}")
     Music replacemusic(
-        @RequestParam("name") String name,
-        @RequestParam("artist") String artist,
-        @RequestParam("file") MultipartFile file, @PathVariable Long id
+        @RequestParam(value = "name", required = false) String name,
+        @RequestParam(value = "artist", required = false) String artist,
+        @RequestParam(value = "file", required = false) MultipartFile file,
+        @PathVariable Long id
     ) {
         return repository.findById(id)
                 .map(music -> {
-                    music.setName(name);
-                    music.setArtist(artist);
-                    music.setPath(file);
+                    if (name != null) music.setName(name);
+                    if (artist != null) music.setArtist(artist);
+                    if (file != null) music.setPath(file);
                     return repository.save(music);
                 })
-                .orElseGet(() -> {
-                    Music newMusic = new Music();
-                    newMusic.setId(id);
-                    newMusic.setName(name);
-                    newMusic.setArtist(artist);
-                    newMusic.setPath(file);
-                    return repository.save(newMusic);
-                });
+                .orElseThrow(() -> new MusicNotFoundException(id));
     }
 
     /* curl sample :
