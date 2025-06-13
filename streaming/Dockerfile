@@ -2,7 +2,7 @@ FROM node:18
 
 WORKDIR /app
 
-COPY ./* .
+COPY ./* ./
 RUN echo "MUSIC_API_LINK=http://ptvu-be-music:8080/music" > .env
 RUN npm install
 
