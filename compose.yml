@@ -40,8 +40,6 @@ services:
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     command: -v start-dev --import-realm jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb;NON_KEYWORDS=VALUE;AUTO_SERVER=true' 
-    ports:
-      - "9000:9000"
     expose:
       - 9000
     networks:
