@@ -1,5 +1,5 @@
 # Pump The Volume Up 
-## Getting Started
+## Getting Started
 ### Prerequisites
 - Docker
 - Docker Compose
@@ -16,4 +16,12 @@ cp prod-application.properties.example prod-application.properties
 then run the following command to build and start the containers:
 ```bash
 docker compose up 
+```
+
+### Development
+#### Musics
+to develop only the music service, you can run the following command in the musics directory:
+```bash
+mvn clean install 
+mvn clean spring-boot:run
 ```
