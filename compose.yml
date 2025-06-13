@@ -36,13 +36,14 @@ services:
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN}
       - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HTTP_PORT=9000
     volumes:
       - ./keycloak:/opt/keycloak/data/import
-    command: -v start-dev --import-realm jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb;NON_KEYWORDS=VALUE;AUTO_SERVER=true'
+    command: -v start-dev --import-realm jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb;NON_KEYWORDS=VALUE;AUTO_SERVER=true' 
     ports:
-      - "9000:8080"
+      - "9000:9000"
     expose:
-      - 8080
+      - 9000
     networks:
       - auth
 
