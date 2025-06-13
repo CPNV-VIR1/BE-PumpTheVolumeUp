@@ -40,7 +40,7 @@ services:
       - ./keycloak:/opt/keycloak/data/import
     command: -v start-dev --import-realm jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb;NON_KEYWORDS=VALUE;AUTO_SERVER=true'
     ports:
-      - "8081:8080"
+      - "9000:8080"
     expose:
       - 8080
     networks:
