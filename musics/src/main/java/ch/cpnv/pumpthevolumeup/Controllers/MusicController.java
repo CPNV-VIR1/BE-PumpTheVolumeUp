@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/music")
+@RequestMapping("/musics")
 public class MusicController {
 
     private final MusicRepository repository;
@@ -19,7 +19,7 @@ public class MusicController {
     }
 
     /* curl sample :
-    curl -i localhost:8080/music
+    curl -i localhost:8080/musics
     */
     @GetMapping
     List<Music> all(){
@@ -41,7 +41,7 @@ public class MusicController {
     }
 
     /* curl sample :
-    curl -i localhost:8080/music/1
+    curl -i localhost:8080/musics/1
     */
     @GetMapping("{id}")
     Music one(@PathVariable Long id){
@@ -50,7 +50,7 @@ public class MusicController {
     }
 
     /* curl sample :
-    curl -i -X PATCH localhost:8080/music/2 \
+    curl -i -X PATCH localhost:8080/musics/2 \
         -H "Content-type:application/json" \
         -d "{\"name\": \"Samwise Bing\", \"artist\": \"peer-to-peer\"}"
      */
@@ -72,7 +72,7 @@ public class MusicController {
     }
 
     /* curl sample :
-    curl -i -X PUT localhost:8080/music/2 \
+    curl -i -X PUT localhost:8080/musics/2 \
         -H "Content-type:application/json" \
         -d "{\"name\": \"Samwise Bing\", \"artist\": \"peer-to-peer\"}"
      */
@@ -100,7 +100,7 @@ public class MusicController {
     }
 
     /* curl sample :
-    curl -i -X DELETE localhost:8080/music/2
+    curl -i -X DELETE localhost:8080/musics/2
     */
     @DeleteMapping("{id}")
     void deletemusic(@PathVariable Long id){

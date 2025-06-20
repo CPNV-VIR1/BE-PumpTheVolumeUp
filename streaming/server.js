@@ -5,7 +5,7 @@ const fs = require('fs');
 const app = express();
 const port = 8000;
 
-app.get('/stream/:id', async (req, res) => {
+app.get('/streams/:id', async (req, res) => {
     try {
         const infoResponse = await axios.get(`${process.env.MUSIC_API_LINK}/${req.params.id}`);
         const filePath = infoResponse.data.path;
